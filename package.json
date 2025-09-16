@@ -1,0 +1,19 @@
+{
+  "name": "paula",
+  "version": "1.0.0",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "JOSHUA REYES",
+  "license": "ISC",
+  "description": "",
+  "devDependencies": {
+    "electron": "^38.1.0",
+    "electron-builder": "^26.0.12"
+  },
+  "dependencies": {
+    "exceljs": "^4.4.0"
+  }
+}
