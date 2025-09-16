@@ -1,19 +1,33 @@
 {
   "name": "paula",
   "version": "1.0.0",
-  "main": "index.js",
+  "main": "src/PAULA/aplicacion/main.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "start": "electron .",
+    "watch": "nodemon --exec electron .",
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "build_react_prod": "webpack --mode production",
+    "build_react_dev": "webpack --mode development",
+    "build_react_dev_w": "webpack --mode development --watch"
   },
   "keywords": [],
   "author": "JOSHUA REYES",
   "license": "ISC",
   "description": "",
   "devDependencies": {
+    "@babel/core": "^7.28.4",
+    "@babel/preset-env": "^7.28.3",
+    "@babel/preset-react": "^7.27.1",
+    "babel-loader": "^10.0.0",
     "electron": "^38.1.0",
-    "electron-builder": "^26.0.12"
+    "electron-builder": "^26.0.12",
+    "webpack": "^5.101.3",
+    "webpack-cli": "^6.0.1"
   },
   "dependencies": {
-    "exceljs": "^4.4.0"
+    "exceljs": "^4.4.0",
+    "react": "^19.1.1",
+    "react-dom": "^19.1.1",
+    "react-router-dom": "^7.9.1"
   }
 }
