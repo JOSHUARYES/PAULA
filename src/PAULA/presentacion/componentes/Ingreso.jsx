@@ -8,12 +8,26 @@ export default function Login({ onLogin }) {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    if (password === '1234') { // contraseña de ejemplo
-      onLogin();
-      navigate('/excel'); // navega a la vista Excel
-    } else {
-      setError('Contraseña incorrecta');
-    }
+    window.electronAPI.comparePassword(password)
+      .then((response) => {
+        if (response.msg === 'success') {
+          console.log("Login exitoso");
+          onLogin();
+          navigate('/excel');
+        } else if (response.msg === 'fail') {
+          setError(response.package);
+        } else {
+          setError(response.package || 'Error desconocido');
+        }
+      })
+      .catch(err => {
+        //console.error(err);
+        if (err.msg === 'fail') {
+          setError(err.package);
+        } else {
+          setError(err.package || err || 'Error desconocido');
+        }
+      });
   };
 
   return (
