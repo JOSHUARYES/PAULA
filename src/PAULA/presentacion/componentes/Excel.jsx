@@ -12,6 +12,8 @@ export default function ExcelApp() {
     window.electronAPI.seleccionarArchivos()
       .then((response) => {
         setFiles(response.package);
+        console.log(response);
+        setResult(`✅ Seleccionados ${response.package.length} archivos`);
       })
       .catch((err) => {
         console.error(err);
@@ -32,12 +34,12 @@ export default function ExcelApp() {
 
     window.electronAPI.consolidarExcels()
       .then((response) => {
-        setResult(`✅ Procesados ${response.count} archivos`);
+        setResult(`✅ Procesados ${response.package} archivos`);
       })
       .catch((err) => {
         console.error(err);
-        setResult("❌ Error al procesar");
         setStatus("❌ Error al procesar");
+        setResult(err.package.message || err.package || "❌ Error Desconocido");
       })
       .finally(() => {
         setLoading(false);
