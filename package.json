@@ -8,12 +8,36 @@
     "test": "echo \"Error: no test specified\" && exit 1",
     "build_react_prod": "webpack --mode production",
     "build_react_dev": "webpack --mode development",
-    "build_react_dev_w": "webpack --mode development --watch"
+    "build_react_dev_w": "webpack --mode development --watch",
+    "build_electron": "electron-builder"
   },
   "keywords": [],
   "author": "JOSHUA REYES",
   "license": "ISC",
-  "description": "",
+  "description": "Aplicaicon para Paula",
+  "build": {
+    "appId": "com.paula.app",
+    "productName": "PAULA",
+    "directories": {
+      "output": "release/v1.0.0"
+    },
+    "files": [
+      "dist/**/*",
+      "src/PAULA/**/*",
+      "node_modules/**/*",
+      "package.json"
+    ],
+    "extraResources": [
+      {
+        "from": ".env",
+        "to": ".env"
+      }
+    ],
+    "win": {
+      "target": "portable",
+      "icon": "src/PAULA/assets/icon.ico"
+    }
+  },
   "devDependencies": {
     "@babel/core": "^7.28.4",
     "@babel/preset-env": "^7.28.3",
@@ -25,7 +49,10 @@
     "webpack-cli": "^6.0.1"
   },
   "dependencies": {
-    "bcrypt": "^6.0.0",
+    "@emotion/react": "^11.14.0",
+    "@emotion/styled": "^11.14.1",
+    "@mui/material": "^7.3.2",
+    "bcryptjs": "^3.0.2",
     "dotenv": "^17.2.2",
     "react": "^19.1.1",
     "react-dom": "^19.1.1",

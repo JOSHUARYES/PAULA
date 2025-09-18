@@ -1,14 +1,24 @@
 const { app, screen, BrowserWindow, ipcMain } = require('electron');
+const isDev = !app.isPackaged; // true en desarrollo, false en build
+
 const path = require('path');
-const { CONFIG } = require(path.join(__dirname, 'config.js'));
-const bcrypt = require('bcrypt');
-require('dotenv').config();
+const bcrypt = require('bcryptjs');
+const dotenv = require('dotenv');
+
+// Cargar variables de entorno desde el archivo .env
+const envPath = isDev
+  ? path.resolve(__dirname, '../../../.env')         // ruta dev
+  : path.join(process.resourcesPath, '.env');    // ruta prod
+dotenv.config({ path: envPath });
 const APP_PASSWORD = process.env.APP_PASSWORD;
+
+const { CONFIG } = require(path.join(__dirname, 'config.js'));
 const { abrirArchivos } = require(path.join(__dirname, 'modulos', 'abrirArchivos.js'));
 const { consolidarExcels } = require(path.join(__dirname, 'modulos', 'consolidaExcel.js'));
 const { descargarConsolidado } = require(path.join(__dirname, 'modulos', 'descargarConsolidado.js'));
 var filePaths;
 var JSON = [];
+
 
 function createWindow(dir, ancho, alto) {
   const win = new BrowserWindow({
@@ -16,12 +26,16 @@ function createWindow(dir, ancho, alto) {
     width: ancho,
     height: alto,
     resizable: false,
+    icon: path.join(path.dirname(__dirname), 'assets', 'icon.ico'),
     webPreferences: {
-      preload: CONFIG.rutas.preload
+      preload: CONFIG.rutas.preload,
+      contextIsolation: true,
+      nodeIntegration: false
     }
   });
   win.loadFile(dir);
   //win.webContents.openDevTools()
+  win.webContents.closeDevTools();
 }
 
 app.whenReady().then(
@@ -59,7 +73,6 @@ ipcMain.on('abrir-archivos', async (event) => {
 
 // Comparar contraseña
 ipcMain.on('compare-password', (event, password) => {
-  //console.log("Comparando contraseñas")
   bcrypt.compare(password, APP_PASSWORD, function (err, correcta) {
     if (err) {
       event.reply('compare-password-reply', { msg: 'error', package: err })
