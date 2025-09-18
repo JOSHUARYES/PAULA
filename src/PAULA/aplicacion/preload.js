@@ -44,5 +44,19 @@ contextBridge.exposeInMainWorld('electronAPI', {
         }
       })
     })
+  },
+  descargarConsolidado: () => {
+    return new Promise((resolve, reject) => {
+      // Envia un mensaje al proceso principal para descargar
+      ipcRenderer.send('descargar-consolidado')
+      // Escucha la respuesta del proceso principal
+      ipcRenderer.once('descargar-consolidado-reply', (event, response) => {
+        if (response.msg === 'success') {
+          resolve(response)
+        } else {
+          reject(response)
+        }
+      })
+    });
   }
 });

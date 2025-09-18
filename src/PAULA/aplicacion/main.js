@@ -12,6 +12,7 @@ const { abrirArchivos } = require(path.join(__dirname, 'modulos', 'abrirArchivos
 const { consolidarExcels } = require(path.join(__dirname, 'modulos', 'consolidaExcel.js'));
 const { descargarConsolidado } = require(path.join(__dirname, 'modulos', 'descargarConsolidado.js'));
 var filePaths;
+var JSON = [];
 
 function createWindow(dir, ancho, alto) {
   const win = new BrowserWindow({
@@ -77,8 +78,9 @@ ipcMain.on('compare-password', (event, password) => {
 ipcMain.on('consolidar-excels', (event) => {
   console.log("Consolidando excels")
   // Aquí iría la lógica para procesar los archivos Excel
-  consolidarExcels(filePaths).then((result) => {
-    event.reply('consolidar-excels-reply', { msg: 'success', package: result })
+  consolidarExcels(filePaths).then(({ cantProcesados, consolidadoJSON }) => {
+    JSON = consolidadoJSON;
+    event.reply('consolidar-excels-reply', { msg: 'success', package: cantProcesados })
   }).catch((err) => {
     event.reply('consolidar-excels-reply', { msg: 'error', package: err.message || err })
   });
@@ -86,12 +88,17 @@ ipcMain.on('consolidar-excels', (event) => {
 
 // Descargar consolidado
 ipcMain.on('descargar-consolidado', (event) => {
-  descargarConsolidado()
-    .then((result) => {
-      event.reply('descargar-consolidado-reply', { msg: 'success', package: result })
+  descargarConsolidado(JSON)
+    .then(({ descargada, cancelada, error }) => {
+      if (descargada) {
+        event.reply('descargar-consolidado-reply', { msg: 'success', package: null })
+      } else if (cancelada) {
+        event.reply('descargar-consolidado-reply', { msg: 'canceled', package: error })
+      } else {
+        event.reply('descargar-consolidado-reply', { msg: 'unknown', package: error })
+      }
     })
     .catch((err) => {
       event.reply('descargar-consolidado-reply', { msg: 'error', package: err.message || err })
     }); 
 });
-

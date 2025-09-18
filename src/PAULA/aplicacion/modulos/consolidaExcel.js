@@ -24,10 +24,10 @@ function consolidarExcels(filesPaths) {
         consolidadoJSON = consolidadoJSON.concat(data);
         cantProcesados++;
       }
-      woorkbookConsolidado = XLSX.utils.book_new();
-      const nuevaHoja = XLSX.utils.json_to_sheet(consolidadoJSON);
-      XLSX.utils.book_append_sheet(woorkbookConsolidado, nuevaHoja, 'Consolidado');
-      resolve(cantProcesados);
+      // woorkbookConsolidado = XLSX.utils.book_new();
+      // const nuevaHoja = XLSX.utils.json_to_sheet(consolidadoJSON);
+      // XLSX.utils.book_append_sheet(woorkbookConsolidado, nuevaHoja, 'Consolidado');
+      resolve({ cantProcesados, consolidadoJSON });
     } catch (error) {
       reject(error);
     }
