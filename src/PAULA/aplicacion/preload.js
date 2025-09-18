@@ -1,4 +1,4 @@
-console.log("✅ preload.js se ha cargado correctamente.");
+//console.log("✅ preload.js se ha cargado correctamente.");
 const { contextBridge, ipcRenderer } = require('electron');
 contextBridge.exposeInMainWorld('electronAPI', {
   comparePassword: (password) => {
@@ -16,13 +16,13 @@ contextBridge.exposeInMainWorld('electronAPI', {
     })
   },
   seleccionarArchivos: () => {
-    console.log("Seleccionar archivos desde preload.js")
+    //console.log("Seleccionar archivos desde preload.js")
     return new Promise((resolve, reject) => {
       // Envia un mensaje al proceso principal para abrir el diálogo de archivos
       ipcRenderer.send('abrir-archivos')
       // Escucha la respuesta del proceso principal
       ipcRenderer.once('abrir-archivos-reply', (event, response) => {
-        console.log("Respuesta del proceso principal:", response.msg);
+        //console.log("Respuesta del proceso principal:", response.msg);
         if (response.msg === 'success') {
           resolve(response)
         } else {

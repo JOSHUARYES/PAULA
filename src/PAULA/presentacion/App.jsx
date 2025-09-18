@@ -8,13 +8,13 @@ export default function App() {
   return (
     <Router>
       <Routes>
-        <Route 
-          path="/" 
-          element={<Login onLogin={() => setLogged(true)} />} 
+        <Route
+          path="/"
+          element={<Login onLogin={() => setLogged(true)} />}
         />
-        <Route 
-          path="/excel" 
-          element={logged ? <ExcelApp /> : <Navigate to="/" />} 
+        <Route
+          path="/excel"
+          element={logged ? <ExcelApp /> : <Navigate to="/" />}
         />
       </Routes>
     </Router>

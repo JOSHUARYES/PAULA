@@ -11,7 +11,7 @@ export default function Login({ onLogin }) {
     window.electronAPI.comparePassword(password)
       .then((response) => {
         if (response.msg === 'success') {
-          console.log("Login exitoso");
+          //console.log("Login exitoso");
           onLogin();
           navigate('/excel');
         } else if (response.msg === 'fail') {

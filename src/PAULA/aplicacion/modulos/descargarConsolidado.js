@@ -7,7 +7,7 @@ function descargarConsolidado(consolidadoJSON) {
       woorkbookConsolidado = XLSX.utils.book_new();
       const nuevaHoja = XLSX.utils.json_to_sheet(consolidadoJSON);
       XLSX.utils.book_append_sheet(woorkbookConsolidado, nuevaHoja, 'Consolidado');
-      console.log("Iniciando descarga del archivo consolidado");
+      //console.log("Iniciando descarga del archivo consolidado");
       const { canceled, filePath } = await dialog.showSaveDialog({
         title: 'Guardar archivo consolidado',
         defaultPath: 'consolidado.xlsx',

@@ -14,11 +14,11 @@ export default function ExcelApp() {
     window.electronAPI.seleccionarArchivos()
       .then((response) => {
         setFiles(response.package);
-        console.log(response);
+        //console.log(response);
         setResult(`✅ Seleccionados ${response.package.length} archivos`);
       })
       .catch((err) => {
-        console.error(err);
+        //console.error(err);
         setFiles([]);
         setResult(err.package || "❌ Error Desconocido");
       });
@@ -42,7 +42,7 @@ export default function ExcelApp() {
         setReadyToDownload(true); // habilitar descarga
       })
       .catch((err) => {
-        console.error(err);
+        //console.error(err);
         setStatus("❌ Error al procesar");
         setResult(err.package.message || err.package || "❌ Error Desconocido");
       })
@@ -61,7 +61,7 @@ export default function ExcelApp() {
         setReadyToDownload(false); // bloquear descarga hasta nuevo procesamiento
       })
       .catch((err) => {
-        console.error(err);
+        //console.error(err);
         if (err.msg === 'canceled') {
           setResult("❌ Descarga cancelada por el usuario");
           setReadyToDownload(true); // permitir reintento de descarga

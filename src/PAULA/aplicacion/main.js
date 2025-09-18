@@ -1,13 +1,9 @@
-const { Console } = require('console');
 const { app, screen, BrowserWindow, ipcMain } = require('electron');
 const path = require('path');
 const { CONFIG } = require(path.join(__dirname, 'config.js'));
 const bcrypt = require('bcrypt');
 require('dotenv').config();
 const APP_PASSWORD = process.env.APP_PASSWORD;
-
-const { dialog } = require('electron');
-//const { abrirArchivos } = require('./modulos/abrirArchivos');
 const { abrirArchivos } = require(path.join(__dirname, 'modulos', 'abrirArchivos.js'));
 const { consolidarExcels } = require(path.join(__dirname, 'modulos', 'consolidaExcel.js'));
 const { descargarConsolidado } = require(path.join(__dirname, 'modulos', 'descargarConsolidado.js'));
@@ -19,12 +15,13 @@ function createWindow(dir, ancho, alto) {
     autoHideMenuBar: true,
     width: ancho,
     height: alto,
+    resizable: false,
     webPreferences: {
       preload: CONFIG.rutas.preload
     }
   });
   win.loadFile(dir);
-  win.webContents.openDevTools()
+  //win.webContents.openDevTools()
 }
 
 app.whenReady().then(
@@ -43,9 +40,9 @@ app.whenReady().then(
 // Abrir diálogo de archivos
 ipcMain.on('abrir-archivos', async (event) => {
   abrirArchivos()
-    .then(({paths,fileNames}) => {
-      console.log("Archivos seleccionados:", paths);
-      console.log("Nombres de archivos: ", fileNames);
+    .then(({ paths, fileNames }) => {
+      //console.log("Archivos seleccionados:", paths);
+      //console.log("Nombres de archivos: ", fileNames);
       if (paths.length > 0) {
         filePaths = paths;
         event.reply('abrir-archivos-reply', { msg: 'success', package: fileNames });
@@ -54,7 +51,7 @@ ipcMain.on('abrir-archivos', async (event) => {
       }
     })
     .catch((err) => {
-      console.error(err);
+      //console.error(err);
       event.reply('abrir-archivos-reply', { msg: 'error', package: err.message || err });
     });
 
@@ -62,7 +59,7 @@ ipcMain.on('abrir-archivos', async (event) => {
 
 // Comparar contraseña
 ipcMain.on('compare-password', (event, password) => {
-  console.log("Comparando contraseñas")
+  //console.log("Comparando contraseñas")
   bcrypt.compare(password, APP_PASSWORD, function (err, correcta) {
     if (err) {
       event.reply('compare-password-reply', { msg: 'error', package: err })
@@ -76,7 +73,7 @@ ipcMain.on('compare-password', (event, password) => {
 
 // Consolidar excels
 ipcMain.on('consolidar-excels', (event) => {
-  console.log("Consolidando excels")
+  //console.log("Consolidando excels")
   // Aquí iría la lógica para procesar los archivos Excel
   consolidarExcels(filePaths).then(({ cantProcesados, consolidadoJSON }) => {
     JSON = consolidadoJSON;
@@ -100,5 +97,11 @@ ipcMain.on('descargar-consolidado', (event) => {
     })
     .catch((err) => {
       event.reply('descargar-consolidado-reply', { msg: 'error', package: err.message || err })
-    }); 
+    });
+});
+
+app.on('window-all-closed', () => {
+  if (process.platform !== 'darwin') {
+    app.quit();
+  }
 });
